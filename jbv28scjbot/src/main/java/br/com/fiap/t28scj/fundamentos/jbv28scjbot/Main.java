@@ -1,7 +1,9 @@
 package br.com.fiap.t28scj.fundamentos.jbv28scjbot;
 
+import java.io.IOException;
 import java.util.List;
 
+import com.pengrad.telegrambot.Callback;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.TelegramBotAdapter;
 import com.pengrad.telegrambot.model.Update;
@@ -38,17 +40,18 @@ public class Main {
 				//atualização  do off-set
 				m  = update.updateId()+1;
 				System.out.println("Recebendo  mensagem:"+  update.message().text());
-				//envio de  "Escrevendo"  antes  de enviar  a  resposta
-				baseResponse  =  bot.execute(new
-				SendChatAction(update.message().chat().id(),  ChatAction.typing.name()));
-				//verificação  de  ação  de chat  foi   enviada   com sucesso
-				System.out.println("Resposta de Chat Action Enviada?"  + 
-				baseResponse.isOk());
-				//envio da mensagem  de  resposta 
-				sendResponse =  bot.execute(new
-				SendMessage(update.message().chat().id(),"Não  entendi..."));
-				//verificação  de  mensagem  enviada   com sucesso
-				System.out.println("Mensagem Enviada?"  +sendResponse.isOk());
+				if ("/start".equals(update.message().text())){
+					sendResponse =  bot.execute(new SendMessage(update.message().chat().id(),"Bem vindo ao gerenciador Banco Virtual."));
+				}else{
+					//envio de  "Escrevendo"  antes  de enviar  a  resposta
+					baseResponse  =  bot.execute(new SendChatAction(update.message().chat().id(),  ChatAction.typing.name()));
+					//verificação  de  ação  de chat  foi   enviada   com sucesso
+					System.out.println("Resposta de Chat Action Enviada?"  + baseResponse.isOk());
+					//envio da mensagem  de  resposta 
+					sendResponse =  bot.execute(new SendMessage(update.message().chat().id(),"Não  entendi..."));
+					//verificação  de  mensagem  enviada   com sucesso
+					System.out.println("Mensagem Enviada?"  +sendResponse.isOk());					
+				}
 			}
 		
 		}
