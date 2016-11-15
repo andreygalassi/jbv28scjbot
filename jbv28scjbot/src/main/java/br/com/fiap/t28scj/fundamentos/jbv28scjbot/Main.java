@@ -1,5 +1,7 @@
 package br.com.fiap.t28scj.fundamentos.jbv28scjbot;
 
+import static br.com.fiap.t28scj.fundamentos.jbv28scjbot.utils.MyUtils.Configuracao.TOKEN;
+
 import java.util.List;
 
 import com.pengrad.telegrambot.TelegramBot;
@@ -13,14 +15,12 @@ import com.pengrad.telegrambot.response.BaseResponse;
 import com.pengrad.telegrambot.response.GetUpdatesResponse;
 import com.pengrad.telegrambot.response.SendResponse;
 
-import br.com.fiap.t28scj.fundamentos.jbv28scjbot.utils.MyUtils;
-
 public class Main {
 
 	public static void main(String[] args) {
 
 		//Criação  do  objeto bot  com as  informações   de acesso
-		TelegramBot  bot = TelegramBotAdapter.build(MyUtils.getPropertie("token"));
+		TelegramBot  bot = TelegramBotAdapter.build(TOKEN.getValor());
 		//objeto  responsável   por  receber as  mensagens
 		GetUpdatesResponse  updatesResponse;
 		//objeto  responsável   por  gerenciar  o  envio de  respostas

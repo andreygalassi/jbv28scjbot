@@ -9,7 +9,7 @@ import java.util.ResourceBundle;
  * @since 15/11/2016
  */
 public class MyUtils {
-    private static enum Singleton {
+    public static enum Singleton {
         INSTANCE;               
 
         private ResourceBundle bundle;
@@ -29,6 +29,26 @@ public class MyUtils {
             return bundle.getString(name);
         }
     };
+    public static enum Configuracao {
+        TOKEN("token");               
+
+        private String valor;
+
+        private Configuracao(String chave) {
+            System.out.println("Carregando arquivo de configuração: " + 
+            System.currentTimeMillis());
+
+			if (chave!=null){
+				valor = getResourceBundle().getString(chave);
+			}
+        }
+        
+        public String getValor(){
+        	return valor;
+        }
+
+    };
+    
 
     private MyUtils() {}
 
