@@ -5,7 +5,7 @@ import java.time.LocalDate;
 /**
  * Destinada as informações dos clientes
  * 
- * @author usuario
+ * @author Andrey
  * @since 15/11/2016
  */
 public class Pessoa {

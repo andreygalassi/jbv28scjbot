@@ -3,7 +3,7 @@ package br.com.fiap.t28scj.fundamentos.jbv28scjbot.entity;
 /**
  * Tipo da movimentação de uma transação. Podendo ser saque ou deposito
  * 
- * @author usuario
+ * @author Andrey
  * @since 15/11/2016
  */
 public enum TipoTransacao {

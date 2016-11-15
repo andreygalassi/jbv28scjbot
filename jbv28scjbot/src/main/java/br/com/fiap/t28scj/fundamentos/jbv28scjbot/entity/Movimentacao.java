@@ -6,7 +6,7 @@ import java.time.LocalDate;
 /**
  * Movimentação de saque ou deposito em cada conta.
  * 
- * @author usuario
+ * @author Andrey
  * @since 15/11/2016
  */
 public class Movimentacao implements Comparable<Movimentacao> {

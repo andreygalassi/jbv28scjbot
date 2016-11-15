@@ -9,7 +9,7 @@ import java.util.Set;
 
 /**
  * 
- * @author usuario
+ * @author Andrey
  * @since 15/11/2016
  */
 public abstract class Conta {

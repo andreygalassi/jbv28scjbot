@@ -1,9 +1,7 @@
 package br.com.fiap.t28scj.fundamentos.jbv28scjbot;
 
-import java.io.IOException;
 import java.util.List;
 
-import com.pengrad.telegrambot.Callback;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.TelegramBotAdapter;
 import com.pengrad.telegrambot.model.Update;
@@ -15,12 +13,14 @@ import com.pengrad.telegrambot.response.BaseResponse;
 import com.pengrad.telegrambot.response.GetUpdatesResponse;
 import com.pengrad.telegrambot.response.SendResponse;
 
+import br.com.fiap.t28scj.fundamentos.jbv28scjbot.utils.MyUtils;
+
 public class Main {
 
 	public static void main(String[] args) {
 
 		//Criação  do  objeto bot  com as  informações   de acesso
-		TelegramBot  bot = TelegramBotAdapter.build("228956424:AAEMSfAvHfzT2k0TbVyyb17y9Hk1ZNadbOc");
+		TelegramBot  bot = TelegramBotAdapter.build(MyUtils.getPropertie("token"));
 		//objeto  responsável   por  receber as  mensagens
 		GetUpdatesResponse  updatesResponse;
 		//objeto  responsável   por  gerenciar  o  envio de  respostas

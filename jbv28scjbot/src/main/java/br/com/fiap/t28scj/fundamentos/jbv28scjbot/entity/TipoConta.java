@@ -2,7 +2,7 @@ package br.com.fiap.t28scj.fundamentos.jbv28scjbot.entity;
 
 /**
  * 
- * @author usuario
+ * @author Andrey
  * @since 15/11/2016
  */
 public enum TipoConta {
