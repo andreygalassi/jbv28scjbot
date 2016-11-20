@@ -83,7 +83,7 @@ public class BotCommands {
 		} else {
 			Pessoa pessoa = pessoaUtils.criarPessoa(criacaoConta.get(1), criacaoConta.get(2), criacaoConta.get(3),
 					criacaoConta.get(4));
-			contaUtils.criarConta(pessoa, TipoConta.valueOf(Integer.parseInt(criacaoConta.get(5))));
+			contaUtils.criarConta(pessoa, TipoConta.getById(criacaoConta.get(5)));
 			bot.execute(new SendMessage(update.message().chat().id(),
 					"Parabéns " + criacaoConta.get(1) + ", sua conta foi criada com sucesso."));
 		}

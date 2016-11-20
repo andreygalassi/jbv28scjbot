@@ -1,5 +1,7 @@
 package br.com.fiap.t28scj.fundamentos.jbv28scjbot.entity;
 
+import java.util.Arrays;
+
 /**
  * 
  * @author Andrey
@@ -29,4 +31,13 @@ public enum TipoConta {
 	public String getDescricao() {
 		return descricao;
 	}
+	
+	public static TipoConta getById(String id){
+		TipoConta tipo = Arrays.asList(TipoConta.values()).stream()
+				.filter(t->t.getId().equals(Integer.parseInt(id)))
+				.findFirst()
+				.get();
+		return tipo;
+	}
+
 }
