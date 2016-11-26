@@ -89,5 +89,25 @@ public class BotCommands {
 		}
 		return sendResponse;
 	}
+	
+	public SendResponse modificarconta(TelegramBot bot, Update update) {
+		SendResponse sendResponse = null;
+		return sendResponse;
+	}
+	
+	public SendResponse inclusaodependentes(TelegramBot bot, Update update) {
+		SendResponse sendResponse = null;
+		return sendResponse;
+	}
+	
+	public SendResponse depositar(TelegramBot bot, Update update) {
+		SendResponse sendResponse = null;
+		return sendResponse;
+	}
+	
+	public SendResponse saque(TelegramBot bot, Update update) {
+		SendResponse sendResponse = null;
+		return sendResponse;
+	}
 
 }

@@ -24,6 +24,10 @@ public class BotInit {
 			List<Update> updates = updatesResponse.updates();
 			for (Update update : updates) {
 				m = update.updateId() + 1;
+				
+				System.out.println(update.message().chat().firstName() + " " +
+						"chamando comando " + update.message().text());
+				
 				if ("/start".equals(update.message().text())) {
 					comandoAtual = update.message().text();
 					comandos.start(bot, update);
