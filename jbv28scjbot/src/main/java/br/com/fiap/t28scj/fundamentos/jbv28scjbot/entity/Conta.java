@@ -29,6 +29,7 @@ public class Conta {
 		this.dtRegistro = LocalDate.now();
 		this.movimentacoes = new ArrayList<>();
 		this.dependentes = new HashSet<>();
+		this.saldo = BigDecimal.ZERO;
 	}
 
 	public Long getId() {

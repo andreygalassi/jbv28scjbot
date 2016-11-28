@@ -31,5 +31,9 @@ public class ContaUtils {
 	public boolean contaJaFoiCriada() {
 		return conta != null;
 	}
+	
+	public Conta getConta(){
+		return conta;
+	}
 
 }

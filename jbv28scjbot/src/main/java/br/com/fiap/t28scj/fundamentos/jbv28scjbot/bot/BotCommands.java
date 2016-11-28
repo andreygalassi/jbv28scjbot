@@ -1,5 +1,6 @@
 package br.com.fiap.t28scj.fundamentos.jbv28scjbot.bot;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -101,7 +102,18 @@ public class BotCommands {
 	}
 	
 	public SendResponse depositar(TelegramBot bot, Update update) {
-		SendResponse sendResponse = null;
+		if (!contaUtils.contaJaFoiCriada())
+			return bot.execute(new SendMessage(update.message().chat().id(),
+					"A conta ainda não foi criadao, digite /criarconta para criar uma nova conta."));
+		String valorStr = update.message().text().split(" ")[1];
+		if (valorStr!=null && isNumeric(valorStr)){
+			contaUtils.getConta().depositar(new BigDecimal(valorStr));
+		}else{
+			SendResponse sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Você deve passar um valor. ex: /depositar 100"));
+			return sendResponse;
+		}
+		SendResponse sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Valor depositado."));
+		sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Saldo atual = "+contaUtils.getConta().getSaldo()));
 		return sendResponse;
 	}
 	
@@ -109,5 +121,17 @@ public class BotCommands {
 		SendResponse sendResponse = null;
 		return sendResponse;
 	}
+	
+	public SendResponse saldo(TelegramBot bot, Update update) {
+		if (!contaUtils.contaJaFoiCriada())
+			return bot.execute(new SendMessage(update.message().chat().id(),
+					"A conta ainda não foi criadao, digite /criarconta para criar uma nova conta."));
+		SendResponse sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Saldo atual = "+contaUtils.getConta().getSaldo()));
+		return sendResponse;
+	}
 
+	private static boolean isNumeric(String str)
+	{
+	  return str.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
+	}
 }

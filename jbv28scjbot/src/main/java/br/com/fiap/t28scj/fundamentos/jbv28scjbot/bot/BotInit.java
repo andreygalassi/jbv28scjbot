@@ -35,6 +35,9 @@ public class BotInit {
 					comandoAtual = update.message().text();
 					comandos.inicializarMsgsCriacaoConta();
 					comandos.criarConta(bot, update);
+				} else if (update.message().text().startsWith("/depositar")) {
+					comandoAtual = update.message().text().split(" ")[0];
+					comandos.depositar(bot, update);
 				} else {
 					if ("/criarconta".equals(comandoAtual)) {
 						comandos.criarConta(bot, update);
