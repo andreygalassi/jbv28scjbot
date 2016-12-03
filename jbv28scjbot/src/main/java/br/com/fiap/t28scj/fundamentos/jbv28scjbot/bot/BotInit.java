@@ -28,24 +28,38 @@ public class BotInit {
 				System.out.println(update.message().chat().firstName() + " " +
 						"chamando comando " + update.message().text());
 				
-				if ("/start".equals(update.message().text())) {
+				switch (update.message().text().split(" ")[0]) {
+				case "/start":
 					comandoAtual = update.message().text();
 					comandos.start(bot, update);
-				} else if ("/criarconta".equals(update.message().text())) {
+					break;
+
+				case "/criarconta":
 					comandoAtual = update.message().text();
 					comandos.inicializarMsgsCriacaoConta();
 					comandos.criarConta(bot, update);
-				} else if (update.message().text().startsWith("/depositar")) {
+					break;
+
+				case "/depositar":
 					comandoAtual = update.message().text().split(" ")[0];
 					comandos.depositar(bot, update);
-				} else {
+					break;
+
+				case "/saque":
+					comandoAtual = update.message().text().split(" ")[0];
+					comandos.saque(bot, update);
+					break;
+
+				default:
 					if ("/criarconta".equals(comandoAtual)) {
 						comandos.criarConta(bot, update);
 					} else {
 						bot.execute(new SendMessage(update.message().chat().id(),
 								"Comando não reconhecido. O que você quis dizer?"));
 					}
+					break;
 				}
+				
 			}
 
 		}

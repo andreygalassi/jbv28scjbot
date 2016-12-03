@@ -66,13 +66,22 @@ public class Conta {
 		return saldo;
 	}
 	
-	public void depositar(BigDecimal valor)
-	{
+	public void depositar(BigDecimal valor){
+		Movimentacao m = new Movimentacao(this, valor, "Deposito em conta no valor de R$"+valor.toString(), TipoTransacao.DEPOSITO);
+		movimentacoes.add(m);
 		saldo = saldo.add(valor);
 	}
 	
-	public void sacar(BigDecimal valor)
-	{
+	public void sacar(BigDecimal valor) throws Exception{
+		if (saldo.subtract(valor.add(new BigDecimal(2.5))).signum()<0){
+			Movimentacao m = new Movimentacao(this, valor, "Saque não realizado por falta de saldo", TipoTransacao.SAQUE);
+			movimentacoes.add(m);
+			throw new Exception("Conta sem saldo para saque. Lembre-se, o saque tem custo de R$2,50");
+		}
+		Movimentacao m = new Movimentacao(this, valor, "Saque em conta no valor de R$"+valor.toString(), TipoTransacao.SAQUE);
+		movimentacoes.add(m);
+		m = new Movimentacao(this, valor, "Custo de R$2,50 para saque de R$"+valor.toString(), TipoTransacao.SAQUE);
+		movimentacoes.add(m);
 		saldo = saldo.subtract(valor).subtract(new BigDecimal(2.5));
 	}
 

@@ -55,7 +55,7 @@ public class BotCommands {
 					new SendMessage(update.message().chat().id(), "Comando não reconhecido. O que você quis dizer?"));
 		}
 	}
-
+	
 	public SendResponse start(TelegramBot bot, Update update) {
 		SendResponse sendResponse = bot
 				.execute(new SendMessage(update.message().chat().id(), "Bem vindo ao gerenciador Banco Virtual.\n \n"));
@@ -105,20 +105,42 @@ public class BotCommands {
 		if (!contaUtils.contaJaFoiCriada())
 			return bot.execute(new SendMessage(update.message().chat().id(),
 					"A conta ainda não foi criadao, digite /criarconta para criar uma nova conta."));
-		String valorStr = update.message().text().split(" ")[1];
-		if (valorStr!=null && isNumeric(valorStr)){
-			contaUtils.getConta().depositar(new BigDecimal(valorStr));
-		}else{
-			SendResponse sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Você deve passar um valor. ex: /depositar 100"));
-			return sendResponse;
+		SendResponse sendResponse = null;
+		try {
+			String valorStr = update.message().text().split(" ")[1];
+			if (valorStr!=null && isNumeric(valorStr)){
+				contaUtils.getConta().depositar(new BigDecimal(valorStr));
+			}else{
+				sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Você deve passar um valor. ex: /depositar 100"));
+				return sendResponse;
+			}
+			sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Valor depositado."));
+			sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Saldo atual = "+contaUtils.getConta().getSaldo()));
+			return sendResponse;			
+		} catch (Exception e) {
+			sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Houve um erro ao processar o deposito. \nVocê deve passar um valor. \nex: /depositar 100"));
 		}
-		SendResponse sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Valor depositado."));
-		sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Saldo atual = "+contaUtils.getConta().getSaldo()));
 		return sendResponse;
 	}
 	
 	public SendResponse saque(TelegramBot bot, Update update) {
+		if (!contaUtils.contaJaFoiCriada())
+			return bot.execute(new SendMessage(update.message().chat().id(),
+					"A conta ainda não foi criadao, digite /criarconta para criar uma nova conta."));
+		String valorStr = update.message().text().split(" ")[1];
 		SendResponse sendResponse = null;
+		try {
+			if (valorStr!=null && isNumeric(valorStr)){
+				contaUtils.getConta().sacar(new BigDecimal(valorStr));
+			}else{
+				sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Você deve passar um valor. ex: /sacar 100"));
+				return sendResponse;
+			}
+			sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Valor sacado."));
+			sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Saldo atual = "+contaUtils.getConta().getSaldo()));
+		} catch (Exception e) {
+			sendResponse = bot.execute(new SendMessage(update.message().chat().id(), e.getMessage()));
+		}
 		return sendResponse;
 	}
 	
