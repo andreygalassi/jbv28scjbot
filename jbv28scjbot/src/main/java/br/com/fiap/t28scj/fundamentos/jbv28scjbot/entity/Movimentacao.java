@@ -16,17 +16,27 @@ public class Movimentacao implements Comparable<Movimentacao> {
 	private BigDecimal valor;
 	private String descricao;
 	private TipoTransacao tipo;
+	private TipoServico servico;
 	private final LocalDate dtRegistro;
 	
-	public Movimentacao(Conta conta, BigDecimal valor, String descricao, TipoTransacao tipo) {
+	public Movimentacao(Conta conta, BigDecimal valor, String descricao, TipoTransacao tipo, TipoServico servico) {
 		super();
 		this.conta = conta;
 		this.valor = valor;
 		this.descricao = descricao;
 		this.tipo = tipo;
+		this.servico = servico;
 		this.dtRegistro = LocalDate.now();
 	}
 	
+	public TipoServico getServico() {
+		return servico;
+	}
+
+	public void setServico(TipoServico servico) {
+		this.servico = servico;
+	}
+
 	public LocalDate getDtRegistro() {
 		return dtRegistro;
 	}
@@ -64,7 +74,7 @@ public class Movimentacao implements Comparable<Movimentacao> {
 
 	@Override
 	public String toString() {
-		return String.format("Movimentacao [conta=%s, valor=%s, descricao=%s, tipo=%s]", conta, valor, descricao, tipo);
+		return String.format("%s - %s - %s - %s - %s\n",dtRegistro, valor, tipo, servico, descricao );
 	}
 
 	@Override

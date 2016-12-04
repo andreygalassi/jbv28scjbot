@@ -62,12 +62,12 @@ public class BotCommands {
 		sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "Serviços Disponíveis:\n"));
 		sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "/criarconta - criar uma nova conta"));
 		sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "/modificarconta - modificar conta"));
-		sendResponse = bot
-				.execute(new SendMessage(update.message().chat().id(), "/inclusaodependentes - Incluir Dependente"));
-		sendResponse = bot.execute(new SendMessage(update.message().chat().id(),
-				"/exibicaodadosconta - Exibição de Dados do titular e dos dependentes"));
+		sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "/inclusaodependentes - Incluir Dependente"));
+		sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "/exibicaodadosconta - Exibição de Dados do titular e dos dependentes"));
 		sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "/depositar - Depositar valor"));
-		sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "/saque - Sacar valor"));
+		sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "/saque - Sacar valor. Custo R$2,50"));
+		sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "/extrato - Mostra o extrato da conta. Custo R$1,00"));
+		sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "/emprestimo - Opções para emprestimo"));
 		return sendResponse;
 	}
 
@@ -87,6 +87,25 @@ public class BotCommands {
 			contaUtils.criarConta(pessoa, TipoConta.getById(criacaoConta.get(5)));
 			bot.execute(new SendMessage(update.message().chat().id(),
 					"Parabéns " + criacaoConta.get(1) + ", sua conta foi criada com sucesso."));
+		}
+		return sendResponse;
+	}
+	
+	public SendResponse emprestimo(TelegramBot bot, Update update) {
+		SendResponse sendResponse = null;
+		return sendResponse;
+	}
+	
+	public SendResponse extrato(TelegramBot bot, Update update) {
+		if (!contaUtils.contaJaFoiCriada())
+			return bot.execute(new SendMessage(update.message().chat().id(),
+					"A conta ainda não foi criadao, digite /criarconta para criar uma nova conta."));
+		SendResponse sendResponse = null;
+		try {
+			contaUtils.getConta().extrato();
+			sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "EXTRATO:\n DATA - VALOR - TIPO - SERVICO - DESCRIÇÃO\n"+contaUtils.getConta().getMovimentacoes()));
+		} catch (Exception e) {
+			sendResponse = bot.execute(new SendMessage(update.message().chat().id(), e.getMessage()));
 		}
 		return sendResponse;
 	}

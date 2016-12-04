@@ -8,8 +8,8 @@ package br.com.fiap.t28scj.fundamentos.jbv28scjbot.entity;
  */
 public enum TipoTransacao {
 
-	SAQUE(1,"Saque"),
-	DEPOSITO(2,"Deposito");
+	SAQUE(1,"S"),
+	DEPOSITO(2,"D");
 	
 	private Integer id;
 	private String descricao;
