@@ -32,7 +32,7 @@ O objetivo  desta  atividade  é  criar um  bot  Telegram que  simule  um banco 
 * <del>11. Exibição dos lançamentos detalhada, com somatória ao final
 * 12. Exibição das retiradas, com somatória ao final
 * <del>13. Exibição  das tarifas de  serviço, com somatória ao  final  dos serviços que  já foram utilizados na conta 
-* 14. Tela de ajuda
+* <del>14. Tela de ajuda
 
 **Todas as operações devem ser armazenadas para futuras consultas em arquivo texto.**
 
