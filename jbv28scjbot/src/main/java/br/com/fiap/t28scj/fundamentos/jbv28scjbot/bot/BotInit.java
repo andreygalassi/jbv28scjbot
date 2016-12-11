@@ -65,6 +65,11 @@ public class BotInit {
 					comandos.inicializarMsgsEmprestimo();
 					comandos.emprestimo(bot, update);
 					break;
+					
+				case "/emprestimosaldodevedor":
+					comandoAtual = update.message().text();
+					comandos.emprestimoSaldoDevedor(bot, update);
+					break;
 
 				default:
 					if ("/criarconta".equals(comandoAtual)) {

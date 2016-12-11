@@ -244,4 +244,17 @@ public class BotCommands {
 	{
 	  return str.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
 	}
+
+	public SendResponse emprestimoSaldoDevedor(TelegramBot bot, Update update) {
+		if (!contaUtils.contaJaFoiCriada())
+			return bot.execute(new SendMessage(update.message().chat().id(),
+					"A conta ainda não foi criadao, digite /criarconta para criar uma nova conta."));
+		SendResponse sendResponse = null;
+		try {
+			sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "SALDO DEVEDOR:\n EMPRESTIMO - VALOR - DT PAGAMENTO - SALDO DEVEDOR\n"+contaUtils.getConta().getEmprestimos()));
+		} catch (Exception e) {
+			sendResponse = bot.execute(new SendMessage(update.message().chat().id(), e.getMessage()));
+		}
+		return sendResponse;
+	}
 }

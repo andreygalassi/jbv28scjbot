@@ -30,10 +30,15 @@ public class Conta {
 		this.tipo = tipo;
 		this.dtRegistro = LocalDate.now();
 		this.movimentacoes = new ArrayList<>();
+		this.emprestimos = new ArrayList<>();
 		this.dependentes = new HashSet<>();
 		this.saldo = BigDecimal.ZERO;
 	}
 
+	public List<Emprestimo> getEmprestimos() {
+		return emprestimos;
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -73,6 +78,8 @@ public class Conta {
 		movimentacoes.add(m);
 		m = new Movimentacao(this, valor, "Emprestimo no valor de R$"+valor.toString(), TipoTransacao.DEPOSITO, TipoServico.EMPRESTIMO);
 		movimentacoes.add(m);
+		Emprestimo emprestimo = new Emprestimo(emprestimos.size()+1, this, valor, prazo);
+		emprestimos.add(emprestimo);
 		saldo = saldo.add(valor);
 		saldo = saldo.subtract(TipoServico.EMPRESTIMO.getCusto());
 	}
