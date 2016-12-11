@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -21,6 +22,7 @@ public class Conta {
 	private BigDecimal saldo;
 	private List<Movimentacao> movimentacoes;
 	private TipoConta tipo;
+	private List<Emprestimo> emprestimos;
 
 	public Conta(Pessoa titular, TipoConta tipo) {
 		super();
@@ -64,6 +66,15 @@ public class Conta {
 
 	public BigDecimal getSaldo() {
 		return saldo;
+	}
+	
+	public void novoEmprestimo(BigDecimal valor, Integer prazo){
+		Movimentacao m = new Movimentacao(this, TipoServico.EMPRESTIMO.getCusto(), "Tarifa emprestimo no valor de R$"+valor.toString(), TipoTransacao.SAQUE, TipoServico.TARIFA_EMPRESTIMO);
+		movimentacoes.add(m);
+		m = new Movimentacao(this, valor, "Emprestimo no valor de R$"+valor.toString(), TipoTransacao.DEPOSITO, TipoServico.EMPRESTIMO);
+		movimentacoes.add(m);
+		saldo = saldo.add(valor);
+		saldo = saldo.subtract(TipoServico.EMPRESTIMO.getCusto());
 	}
 	
 	public void depositar(BigDecimal valor){

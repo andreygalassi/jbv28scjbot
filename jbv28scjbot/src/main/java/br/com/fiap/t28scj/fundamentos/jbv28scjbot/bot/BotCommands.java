@@ -1,6 +1,7 @@
 package br.com.fiap.t28scj.fundamentos.jbv28scjbot.bot;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -21,11 +22,16 @@ public class BotCommands {
 
 	private ContaUtils contaUtils;
 	private PessoaUtils pessoaUtils;
+	
 	private Iterator<String> itMsgCriacaoConta;
 	private Map<Integer, String> criacaoConta;
 	private int indexMsgCriacaoConta;
-
 	List<String> mensagensCriacaoConta;
+
+	private Iterator<String> itMsgEmprestimo;
+	private Map<Integer, String> emprestimo;
+	private int indexMsgEmprestimo;
+	List<String> mensagensEmprestimo;
 
 	public BotCommands() {
 		contaUtils = new ContaUtils();
@@ -37,6 +43,20 @@ public class BotCommands {
 				"Para finalizar precisamos que você escolha seu tipo de conta\n Pessoa Física: Digite 1\n Pessoa Jurídica: Digite 2");
 		criacaoConta = new HashMap<>();
 		inicializarMsgsCriacaoConta();
+
+		mensagensEmprestimo = Arrays.asList(
+				"Ok, você está solicitando um emprestimo. \n"
+				+ "O prazo máximo é de 3 anos e o valor máximo é %s.\n"
+				+ "Para prosseguirmos digite o valor a ser contratado ou 'sair' para cancelar a operação. \n"
+				+ "(Custo da operação R$15,00 e juros de 5%%a.m.)",
+				"Informe o prazo em meses.");
+		emprestimo = new HashMap<>();
+		inicializarMsgsEmprestimo();
+	}
+
+	public void inicializarMsgsEmprestimo() {
+		itMsgEmprestimo = mensagensEmprestimo.iterator();
+		indexMsgEmprestimo = 0;
 	}
 
 	public void inicializarMsgsCriacaoConta() {
@@ -44,17 +64,17 @@ public class BotCommands {
 		indexMsgCriacaoConta = 0;
 	}
 
-	public void definirComando(TelegramBot bot, Update update) {
-		if ("/start".equals(update.message().text())) {
-			this.start(bot, update);
-		}
-		if ("/criarconta".equals(update.message().text())) {
-			this.criarConta(bot, update);
-		} else {
-			bot.execute(
-					new SendMessage(update.message().chat().id(), "Comando não reconhecido. O que você quis dizer?"));
-		}
-	}
+//	public void definirComando(TelegramBot bot, Update update) {
+//		if ("/start".equals(update.message().text())) {
+//			this.start(bot, update);
+//		}
+//		if ("/criarconta".equals(update.message().text())) {
+//			this.criarConta(bot, update);
+//		} else {
+//			bot.execute(
+//					new SendMessage(update.message().chat().id(), "Comando não reconhecido. O que você quis dizer?"));
+//		}
+//	}
 	
 	public SendResponse start(TelegramBot bot, Update update) {
 		SendResponse sendResponse = bot
@@ -76,8 +96,7 @@ public class BotCommands {
 			return bot.execute(new SendMessage(update.message().chat().id(),
 					"Você já criou uma conta, por favor solicite outro serviço"));
 		SendResponse sendResponse = null;
-		if (indexMsgCriacaoConta > 0)
-			criacaoConta.put(indexMsgCriacaoConta, update.message().text());
+		if (indexMsgCriacaoConta > 0) criacaoConta.put(indexMsgCriacaoConta, update.message().text());
 		indexMsgCriacaoConta++;
 		if (itMsgCriacaoConta.hasNext()) {
 			sendResponse = bot.execute(new SendMessage(update.message().chat().id(), itMsgCriacaoConta.next()));
@@ -92,7 +111,56 @@ public class BotCommands {
 	}
 	
 	public SendResponse emprestimo(TelegramBot bot, Update update) {
+		if (!contaUtils.contaJaFoiCriada())
+			return bot.execute(new SendMessage(update.message().chat().id(),
+					"Você ainda não criou uma conta, por favor solicite /criarconta"));
+		
 		SendResponse sendResponse = null;
+		
+		if (indexMsgEmprestimo > 0) emprestimo.put(indexMsgEmprestimo, String.format(update.message().text(),contaUtils.getConta().getSaldo()));
+		indexMsgEmprestimo++;
+		if (itMsgEmprestimo.hasNext()) {
+			sendResponse = bot.execute(new SendMessage(update.message().chat().id(), String.format(itMsgEmprestimo.next(),
+					new DecimalFormat("0.00").format(contaUtils.getConta().getSaldo().multiply(new BigDecimal("40"))))));
+		} else {
+			String valorStr = emprestimo.get(1);
+			if (emprestimo.get(emprestimo.size()).equals("sair")){
+//				inicializarMsgsEmprestimo();
+				return bot.execute(new SendMessage(update.message().chat().id(),
+						"Ok! Operação cancelada."));
+			}
+			BigDecimal valor = null;
+			try {
+				valor = new BigDecimal(valorStr);				
+			} catch (Exception e) {
+				return bot.execute(new SendMessage(update.message().chat().id(),
+						"Não consegui entender o valor. Por Favor, repita a operação."));
+			}
+			String prazoStr = emprestimo.get(2);
+			Integer prazo = 0;
+			try {
+				prazo = Integer.valueOf(prazoStr);
+			} catch (Exception e) {
+				return bot.execute(new SendMessage(update.message().chat().id(),
+						"Não consegui entender o prazo. Por Favor, repita a operação."));
+			}
+			
+			sendResponse = null;
+			if (prazo > 36 || prazo < 1) {
+				return bot.execute(new SendMessage(update.message().chat().id(),
+						"O prazo deve estar entre 1 e 36 meses. Por Favor, repita a operação."));
+			}
+			if (valor.compareTo(contaUtils.getConta().getSaldo().multiply(new BigDecimal("40")))<=0){
+				contaUtils.getConta().novoEmprestimo(valor,prazo);
+				bot.execute(new SendMessage(update.message().chat().id(),
+						"Parabens, valor contratado com sucesso."));
+			}else{
+				sendResponse = bot.execute(new SendMessage(update.message().chat().id(),
+						"Essa quantia é maior que a quantida liberada para você. Defina outro valor."));
+			}
+			
+		}
+		
 		return sendResponse;
 	}
 	
@@ -104,6 +172,7 @@ public class BotCommands {
 		try {
 			contaUtils.getConta().extrato();
 			sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "EXTRATO:\n DATA - VALOR - TIPO - SERVICO - DESCRIÇÃO\n"+contaUtils.getConta().getMovimentacoes()));
+			sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "SALDO TOTAL: "+contaUtils.getConta().getSaldo()));
 		} catch (Exception e) {
 			sendResponse = bot.execute(new SendMessage(update.message().chat().id(), e.getMessage()));
 		}

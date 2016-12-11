@@ -50,6 +50,11 @@ public class BotInit {
 					comandos.saque(bot, update);
 					break;
 
+				case "/saldo":
+					comandoAtual = update.message().text();
+					comandos.saldo(bot, update);
+					break;
+
 				case "/extrato":
 					comandoAtual = update.message().text();
 					comandos.extrato(bot, update);
@@ -57,6 +62,7 @@ public class BotInit {
 
 				case "/emprestimo":
 					comandoAtual = update.message().text();
+					comandos.inicializarMsgsEmprestimo();
 					comandos.emprestimo(bot, update);
 					break;
 
@@ -64,7 +70,9 @@ public class BotInit {
 					if ("/criarconta".equals(comandoAtual)) {
 						comandos.criarConta(bot, update);
 					} else if("/emprestimo".equals(comandoAtual)) {
-						//TODO comandos para a solicitação de emprestimo
+						comandos.emprestimo(bot, update);
+					} else if("/sair".equals(comandoAtual)) {
+						comandoAtual=null;
 					} else {
 						bot.execute(new SendMessage(update.message().chat().id(),
 								"Comando não reconhecido. O que você quis dizer?"));

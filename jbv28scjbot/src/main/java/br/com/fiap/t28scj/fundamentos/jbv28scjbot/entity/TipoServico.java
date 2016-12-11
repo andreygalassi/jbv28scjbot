@@ -14,7 +14,8 @@ public enum TipoServico {
 	DEPOSITO(2,"Deposito","0.00"),
 	TARIFA_SAQUE(1,"Tarifa Saque", "2.50"),
 	EXTRATO(3,"Tarifa Extrato","1.00"),
-	EMPRESTIMO(4,"Tarifa Emprestimo","15.00");
+	EMPRESTIMO(4,"Emprestimo","15.00"),
+	TARIFA_EMPRESTIMO(4,"Tarifa Emprestimo","0.00");
 	
 	private Integer id;
 	private String descricao;
