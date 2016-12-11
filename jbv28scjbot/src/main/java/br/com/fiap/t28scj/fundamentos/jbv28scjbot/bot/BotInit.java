@@ -70,6 +70,11 @@ public class BotInit {
 					comandoAtual = update.message().text();
 					comandos.emprestimoSaldoDevedor(bot, update);
 					break;
+					
+				case "/listatarifas":
+					comandoAtual = update.message().text();
+					comandos.listatarifas(bot, update);
+					break;
 
 				default:
 					if ("/criarconta".equals(comandoAtual)) {
