@@ -75,6 +75,11 @@ public class BotInit {
 					comandoAtual = update.message().text();
 					comandos.listatarifas(bot, update);
 					break;
+					
+				case "/ajuda":
+					comandoAtual = update.message().text();
+					comandos.start(bot, update);
+					break;
 
 				default:
 					if ("/criarconta".equals(comandoAtual)) {

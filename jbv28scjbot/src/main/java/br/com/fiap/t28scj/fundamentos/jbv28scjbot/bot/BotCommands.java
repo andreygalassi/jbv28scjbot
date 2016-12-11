@@ -91,6 +91,11 @@ public class BotCommands {
 		sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "/saque - Sacar valor. Custo R$2,50"));
 		sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "/extrato - Mostra o extrato da conta. Custo R$1,00"));
 		sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "/emprestimo - Opções para emprestimo"));
+		sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "/saldo - Informa o saldo da conta"));
+		sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "/emprestimosaldodevedor - exibe o saldo devedor do emprestimo"));
+		sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "/listatarifas - mostra a lista de tarifas e o montante pago"));
+		sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "/ajuda - mostra a ajuda"));
+		
 		return sendResponse;
 	}
 
