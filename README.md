@@ -34,7 +34,7 @@ O objetivo  desta  atividade  é  criar um  bot  Telegram que  simule  um banco 
 * 13. Exibição  das tarifas de  serviço, com somatória ao  final  dos serviços que  já foram utilizados na conta 
 * 14. Tela de ajuda
 
-*Todas as operações devem ser armazenadas para futuras consultas em arquivo texto.*
+**Todas as operações devem ser armazenadas para futuras consultas em arquivo texto.**
 
 ##Considerações
 As  propostas  apresentadas  contêm  o  mínimo  de  funcionalidade  que  poderão  ser aprimoradas ou acrescentadas desde que mantenham a entrega mínima requerida além do foco principal.
