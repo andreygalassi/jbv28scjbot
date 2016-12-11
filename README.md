@@ -35,3 +35,28 @@ O objetivo  desta  atividade  é  criar um  bot  Telegram que  simule  um banco 
 * 14. Tela de ajuda
 
 Todas as operações devem ser armazenadas para futuras consultas em arquivo texto.
+
+##Considerações
+As  propostas  apresentadas  contêm  o  mínimo  de  funcionalidade  que  poderão  ser aprimoradas ou acrescentadas desde que mantenham a entrega mínima requerida além do foco principal.
+Não será permitida a criação de um projeto não relacionado com os temas sugeridos.
+Utilizar a API  Twitter4J (http://twitter4j.org/en/index.html)  para integração com o Twitter, no site da  API possui ampla documentação.
+No  caso  do  Telegram,  utilizar  a  API  Pengrad  Telegram  Bot (https://github.com/pengrad/java-telegram -bot-api)  para  integração  com  o  Telegram.  A documentação do Telegram pode ser encontrada em https://core.telegram.org/bots. 
+Eventuais dúvidas de utilização das API s  poderão ser discutidas com o professor.
+
+##Modelo e Entrega
+O trabalho deverá ser entregue como um relatório técnico completo, utilizando linguagem e layout apropriado, contendo os itens a seguir obrigatoriamente:
+* Capa contendo o nome e número de matrícula dos integrantes;
+* Índice completo; 
+* Componentes, bibliotecas e frameworks utilizados.
+* Explicação do uso de cada pacote (organização do sistema), class e e método;
+* Diagrama de classes;
+* Diagrama de sequência;
+* Capturas de telas da aplicação comentando cada funcionalidade  relevante passo-apasso.
+* Link do GitHub com o código-fonte enviado.
+
+Deverá ser entregue um arquivo  PDF do relatório técnico no Portal do Aluno. Os códigos fontes deverão ser carregados na conta do GitHub  do grupo ou de algum membro do grupo. Lembrando que código fonte da aplicação é obrigatório o desenvolvimento no IDE Eclipse  para que sejam testadas e verificadas todas as funcionalidades.
+###A visos Importantes
+* Este  trabalho  não  é  apenas  de  desenvolvimento  de  um  sistema. Contempla documentação adequada e justificativa necessária para se alcançar o resultado final;
+* Tente equilibrar  o tempo gasto tanto no desenvolvimento  do s istema quanto  na documentação  uma  vez   que  ambos  os  conceitos  terão  pesos  iguais  e complementares na avaliação; 
+* A data de entrega não será postergada no Portal do Aluno em hipótese alguma; qualquer  “Push/Commit” do projeto no GitHub  posterior a data de entrega será descontada 3,0 pontos.
+* Arquivos de código-fonte desenvolvidos em outros tipos de IDE (como o  Netbeans, IntelliJ ) não serão aceitos e caso sejam  enviados desta forma será descontado 3,0 pontos;
