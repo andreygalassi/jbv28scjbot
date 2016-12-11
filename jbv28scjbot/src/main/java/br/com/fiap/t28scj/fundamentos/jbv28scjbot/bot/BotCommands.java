@@ -7,14 +7,17 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
 
+import br.com.fiap.t28scj.fundamentos.jbv28scjbot.entity.Movimentacao;
 import br.com.fiap.t28scj.fundamentos.jbv28scjbot.entity.Pessoa;
 import br.com.fiap.t28scj.fundamentos.jbv28scjbot.entity.TipoConta;
+import br.com.fiap.t28scj.fundamentos.jbv28scjbot.entity.TipoServico;
 import br.com.fiap.t28scj.fundamentos.jbv28scjbot.utils.ContaUtils;
 import br.com.fiap.t28scj.fundamentos.jbv28scjbot.utils.PessoaUtils;
 
@@ -170,7 +173,6 @@ public class BotCommands {
 					"A conta ainda não foi criadao, digite /criarconta para criar uma nova conta."));
 		SendResponse sendResponse = null;
 		try {
-			contaUtils.getConta().extrato();
 			sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "EXTRATO:\n DATA - VALOR - TIPO - SERVICO - DESCRIÇÃO\n"+contaUtils.getConta().getMovimentacoes()));
 			sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "SALDO TOTAL: "+contaUtils.getConta().getSaldo()));
 		} catch (Exception e) {
@@ -255,6 +257,25 @@ public class BotCommands {
 		} catch (Exception e) {
 			sendResponse = bot.execute(new SendMessage(update.message().chat().id(), e.getMessage()));
 		}
+		return sendResponse;
+	}
+
+	public SendResponse listatarifas(TelegramBot bot, Update update) {
+		if (!contaUtils.contaJaFoiCriada())
+			return bot.execute(new SendMessage(update.message().chat().id(),
+					"A conta ainda não foi criadao, digite /criarconta para criar uma nova conta."));
+		
+		List<Movimentacao> tarifas = contaUtils.getConta().getMovimentacoes().stream()
+				.filter(m -> (m.getServico()==TipoServico.TARIFA_EMPRESTIMO || m.getServico()==TipoServico.TARIFA_SAQUE))
+				.collect(Collectors.toList());
+		
+		BigDecimal total = BigDecimal.ZERO;
+		for (Movimentacao t : tarifas) {
+			total = total.add(t.getValor());
+		}
+		
+		SendResponse sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "EXTRATO DE TARIFAS:\n DATA - VALOR - TIPO - SERVICO - DESCRIÇÃO\n"+tarifas));
+		sendResponse = bot.execute(new SendMessage(update.message().chat().id(), "TOTAL: "+total));
 		return sendResponse;
 	}
 }
