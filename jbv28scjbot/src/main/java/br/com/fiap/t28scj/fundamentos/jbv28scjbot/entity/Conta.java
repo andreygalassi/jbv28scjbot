@@ -15,7 +15,6 @@ import java.util.Set;
  */
 public class Conta {
 
-	private Long id;
 	private Pessoa titular;
 	private Set<Pessoa> dependentes;
 	private LocalDate dtRegistro;
@@ -33,18 +32,11 @@ public class Conta {
 		this.emprestimos = new ArrayList<>();
 		this.dependentes = new HashSet<>();
 		this.saldo = BigDecimal.ZERO;
+		this.dependentes = new HashSet<>();
 	}
 
 	public List<Emprestimo> getEmprestimos() {
 		return emprestimos;
-	}
-	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public Pessoa getTitular() {
@@ -52,7 +44,7 @@ public class Conta {
 	}
 
 	public Set<Pessoa> getDependentes() {
-		if(dependentes == null)
+		if (dependentes == null)
 			dependentes = new HashSet<>();
 		return dependentes;
 	}
@@ -72,42 +64,52 @@ public class Conta {
 	public BigDecimal getSaldo() {
 		return saldo;
 	}
-	
-	public void novoEmprestimo(BigDecimal valor, Integer prazo){
-		Movimentacao m = new Movimentacao(this, TipoServico.EMPRESTIMO.getCusto(), "Tarifa emprestimo no valor de R$"+valor.toString(), TipoTransacao.SAQUE, TipoServico.TARIFA_EMPRESTIMO);
+
+	public Movimentacao novoEmprestimo(BigDecimal valor, Integer prazo) {
+		Movimentacao m = new Movimentacao(this, TipoServico.EMPRESTIMO.getCusto(),
+				"Tarifa emprestimo no valor de R$" + valor.toString(), TipoTransacao.SAQUE,
+				TipoServico.TARIFA_EMPRESTIMO);
 		movimentacoes.add(m);
-		m = new Movimentacao(this, valor, "Emprestimo no valor de R$"+valor.toString(), TipoTransacao.DEPOSITO, TipoServico.EMPRESTIMO);
+		m = new Movimentacao(this, valor, "Emprestimo no valor de R$" + valor.toString(), TipoTransacao.DEPOSITO,
+				TipoServico.EMPRESTIMO);
 		movimentacoes.add(m);
-		Emprestimo emprestimo = new Emprestimo(emprestimos.size()+1, this, valor, prazo);
+		Emprestimo emprestimo = new Emprestimo(emprestimos.size() + 1, this, valor, prazo);
 		emprestimos.add(emprestimo);
 		saldo = saldo.add(valor);
 		saldo = saldo.subtract(TipoServico.EMPRESTIMO.getCusto());
+		return m;
 	}
-	
-	public void depositar(BigDecimal valor){
-		Movimentacao m = new Movimentacao(this, valor, "Deposito em conta no valor de R$"+valor.toString(), TipoTransacao.DEPOSITO, TipoServico.DEPOSITO);
+
+	public void depositar(BigDecimal valor) {
+		Movimentacao m = new Movimentacao(this, valor, "Deposito em conta no valor de R$" + valor.toString(),
+				TipoTransacao.DEPOSITO, TipoServico.DEPOSITO);
 		movimentacoes.add(m);
 		saldo = saldo.add(valor);
 	}
-	
-	public void extrato() throws Exception{
-		if (saldo.subtract(new BigDecimal("1.00")).signum()<0){
+
+	public void extrato() throws Exception {
+		if (saldo.subtract(new BigDecimal("1.00")).signum() < 0) {
 			throw new Exception("Conta sem saldo para tarifa extrato. Lembre-se, o extrato tem custo de R$1,00");
 		}
-		Movimentacao m = new Movimentacao(this, new BigDecimal("1.00"), "Tarifa Extrato", TipoTransacao.SAQUE, TipoServico.EXTRATO);
+		Movimentacao m = new Movimentacao(this, new BigDecimal("1.00"), "Tarifa Extrato", TipoTransacao.SAQUE,
+				TipoServico.EXTRATO);
 		movimentacoes.add(m);
 		saldo = saldo.subtract(new BigDecimal("1.00"));
 	}
-	
-	public void sacar(BigDecimal valor) throws Exception{
-		if (saldo.subtract(valor.add(new BigDecimal("2.5"))).signum()<0){
-//			Movimentacao m = new Movimentacao(this, valor, "Saque não realizado por falta de saldo", TipoTransacao.SAQUE, TipoServico.SAQUE);
-//			movimentacoes.add(m);
+
+	public void sacar(BigDecimal valor) throws Exception {
+		if (saldo.subtract(valor.add(new BigDecimal("2.5"))).signum() < 0) {
+			// Movimentacao m = new Movimentacao(this, valor, "Saque não
+			// realizado por falta de saldo", TipoTransacao.SAQUE,
+			// TipoServico.SAQUE);
+			// movimentacoes.add(m);
 			throw new Exception("Conta sem saldo para saque. Lembre-se, o saque tem custo de R$2,50");
 		}
-		Movimentacao m = new Movimentacao(this, valor, "Saque em conta no valor de R$"+valor.toString(), TipoTransacao.SAQUE, TipoServico.SAQUE);
+		Movimentacao m = new Movimentacao(this, valor, "Saque em conta no valor de R$" + valor.toString(),
+				TipoTransacao.SAQUE, TipoServico.SAQUE);
 		movimentacoes.add(m);
-		m = new Movimentacao(this, valor, "Custo de R$2,50 para saque de R$"+valor.toString(), TipoTransacao.SAQUE, TipoServico.TARIFA_SAQUE);
+		m = new Movimentacao(this, valor, "Custo de R$2,50 para saque de R$" + valor.toString(), TipoTransacao.SAQUE,
+				TipoServico.TARIFA_SAQUE);
 		movimentacoes.add(m);
 		saldo = saldo.subtract(valor).subtract(new BigDecimal("2.5"));
 	}
@@ -130,8 +132,8 @@ public class Conta {
 
 	@Override
 	public String toString() {
-		return String.format("Conta [id=%s, titular=%s, qtDependentes=%s, dtRegistro=%s, saldo=%s, tipo=%s]", id,
-				titular, dependentes.size(), dtRegistro, saldo, tipo);
+		return String.format("Conta [titular=%s, qtDependentes=%s, dtRegistro=%s, saldo=%s, tipo=%s]", titular,
+				dependentes.size(), dtRegistro, saldo, tipo);
 	}
 
 }
