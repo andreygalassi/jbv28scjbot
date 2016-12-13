@@ -9,9 +9,8 @@ public class PessoaUtils {
 
 	private Pessoa pessoa;
 
-	public Pessoa criarPessoa(String nome, String endereco, String cpf, String dataNascimento) {
-		pessoa = new Pessoa(nome, endereco, cpf,
-				LocalDate.parse(dataNascimento, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+	public Pessoa criarPessoa(String nome, String endereco, String cpf, LocalDate dataNascimento) {
+		pessoa = new Pessoa(nome, endereco, cpf, dataNascimento);
 		return pessoa;
 	}
 

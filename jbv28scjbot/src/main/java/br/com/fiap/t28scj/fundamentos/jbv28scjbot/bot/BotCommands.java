@@ -2,6 +2,7 @@ package br.com.fiap.t28scj.fundamentos.jbv28scjbot.bot;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -44,7 +45,7 @@ public class BotCommands {
 
 	private Iterator<String> itMsgEmprestimo;
 	private Map<Integer, String> emprestimo;
-	private int indexMsgEmprestimo;	
+	private int indexMsgEmprestimo;
 	List<String> mensagensEmprestimo;
 
 	public BotCommands() {
@@ -52,7 +53,7 @@ public class BotCommands {
 		pessoaUtils = new PessoaUtils();
 		mensagensCriacaoConta = Arrays.asList(
 				"Ok, você está criando uma nova conta. Para prosseguirmos necesitamos de algumas informações. Para começarmos digite seu nome.",
-				"Nos diga seu endereço", "Digite seu CPF",
+				"Nos diga seu endereço", "Digite seu CPF apenas com números",
 				"Calma, está terminando. Informe pra gente a data de nascimento no formato dd/mm/aaaa",
 				"Para finalizar precisamos que você escolha seu tipo de conta\n Corrente: Digite 1\n Poupança: Digite 2");
 		criacaoConta = new HashMap<>();
@@ -63,7 +64,7 @@ public class BotCommands {
 
 		mensagensInclusaoDependentes = Arrays.asList(
 				"Ok, você decidiu vincular um novo dependente a sua conta. Para prosseguirmos necesitamos dos dados desse dependente. Portanto, digite seu nome.",
-				"Nos diga seu endereço", "Digite seu CPF",
+				"Nos diga seu endereço", "Digite seu CPF apenas com números",
 				"Para finalizar nos informe a data de nascimento no formato dd/mm/aaaa");
 		inclusaoDependente = new HashMap<>();
 		inicializarMsgsInclusaoDependentes();
@@ -141,8 +142,14 @@ public class BotCommands {
 		if (itMsgCriacaoConta.hasNext()) {
 			sendResponse = bot.execute(new SendMessage(update.message().chat().id(), itMsgCriacaoConta.next()));
 		} else {
+			LocalDate dataNascimento;
+			try {
+				dataNascimento = LocalDate.parse(criacaoConta.get(4), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+			} catch (Exception e) {
+				dataNascimento = null;
+			}
 			Pessoa pessoa = pessoaUtils.criarPessoa(criacaoConta.get(1), criacaoConta.get(2), criacaoConta.get(3),
-					criacaoConta.get(4));
+					dataNascimento);
 			contaUtils.criarConta(pessoa, TipoConta.getById(criacaoConta.get(5)));
 			bot.execute(new SendMessage(update.message().chat().id(),
 					"Parabéns " + pessoa.getNome() + ", sua conta foi criada com sucesso."));
@@ -184,8 +191,14 @@ public class BotCommands {
 		if (itMsgInclusaoDependentes.hasNext()) {
 			sendResponse = bot.execute(new SendMessage(update.message().chat().id(), itMsgInclusaoDependentes.next()));
 		} else {
+			LocalDate dataNascimento;
+			try {
+				dataNascimento = LocalDate.parse(inclusaoDependente.get(4), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+			} catch (Exception e) {
+				dataNascimento = null;
+			}
 			Pessoa pessoa = pessoaUtils.criarPessoa(inclusaoDependente.get(1), inclusaoDependente.get(2),
-					inclusaoDependente.get(3), inclusaoDependente.get(4));
+					inclusaoDependente.get(3), dataNascimento);
 			contaUtils.getConta().getDependentes().add(pessoa);
 			bot.execute(new SendMessage(update.message().chat().id(),
 					"Parabéns. O dependente " + pessoa.getNome() + " foi incluído com sucesso."));
@@ -208,8 +221,11 @@ public class BotCommands {
 		stringBuilder.append("Titular:\n\n");
 		stringBuilder.append("Nome: " + titular.getNome() + "\n");
 		stringBuilder.append("CPF: " + titular.getCpf() + "\n");
-		stringBuilder.append("Data de Nascimento: "
-				+ titular.getDtNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "\n");
+		stringBuilder
+				.append("Data de Nascimento: "
+						+ (titular.getDtNascimento() != null
+								? titular.getDtNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "")
+				+ "\n");
 		stringBuilder.append("Data de Registro: "
 				+ titular.getDtRegistro().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "\n\n\n");
 		if (conta.getDependentes() != null && conta.getDependentes().size() > 0) {
@@ -218,7 +234,9 @@ public class BotCommands {
 				stringBuilder.append("Nome: " + dependente.getNome() + "\n");
 				stringBuilder.append("CPF: " + dependente.getCpf() + "\n");
 				stringBuilder.append("Data de Nascimento: "
-						+ dependente.getDtNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "\n");
+						+ (dependente.getDtNascimento() != null
+								? dependente.getDtNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "")
+						+ "\n");
 				stringBuilder.append("Data de Registro: "
 						+ dependente.getDtRegistro().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "\n");
 			}
@@ -415,7 +433,7 @@ public class BotCommands {
 	public SendResponse listatarifas(TelegramBot bot, Update update) {
 		if (!contaUtils.contaJaFoiCriada())
 			return bot.execute(new SendMessage(update.message().chat().id(),
-					"A conta ainda não foi criadao, digite /criarconta para criar uma nova conta."));
+					"A conta ainda não foi criada, digite /criarconta para criar uma nova conta."));
 
 		List<Movimentacao> tarifas = contaUtils.getConta().getMovimentacoes().stream().filter(
 				m -> (m.getServico() == TipoServico.TARIFA_EMPRESTIMO || m.getServico() == TipoServico.TARIFA_SAQUE))
